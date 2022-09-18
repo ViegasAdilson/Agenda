@@ -1,0 +1,57 @@
+* {
+    font-family: 'Roboto Slab', serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+body {
+    background-image: url('../piture/agenda.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+#entra-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 200px 400px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+#entra-div h3 {
+    font-size: 40px;
+
+}
+
+.form label,
+.form input {
+    display: block;
+    width: 100%,
+}
+
+.form button {
+    display: inline;
+    margin: 10px 30px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.form label {
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+
+.form input {
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+
+
+
+.base {}
