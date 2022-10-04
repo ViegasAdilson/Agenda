@@ -26,42 +26,43 @@ It is an application that in the first place to log in to the page you need to c
 
 ### app.py
 ```Python
-########### database #########################
-#class that represent web page Users
+###################### database #########################
+#class that represent Users table in database
 class Users(db.Model, UserMixin):
    pass
    
-#class that represent Contact that user will creat
+#class that represent Contacts table in database
 class Contacts(db.Model):
    pass
-################ Forms #########################
-# Those are class are form that I will render in HTML templats
+######################## Forms #########################
 
-# Form to creat user for my application 
+# Those are class form that I use to render form in the HTML templates
+
+# Form to creat User for my application with 'username, email, and password'
 class RegisterForm(FlaskForm):
    pss
  
- # Form that user use to log in the page with email an password
+ # Form that will render log in form in the application with an email and password and login button
  class LoginForm(FlaskForm):
    pass
  
- # Form to creat Contact on your dashboard and I use the same form to edit contact as well 
+ # Form that will render form to creat Contact on your in the application. And I use the same form to edit contact
  class ContactForm(FlaskForm):
    pass
  
- #################### Routes ##########################
- # Home route that render log in page 
+######################## Routes ##########################
+# Home route that render log in page for User log in the application
 @app.route('/', methods=['GET', 'POST'])
 def sign_page():
    pass
   
-# Dashboard page that render all your Contact 
+# Dashboard page that will list all your Contact automatically
 @app.route('/contacts', methods=['POST', 'GET'])
 @login_required
 def list_page():
    pass
 
-# Register page to regist user in the  application
+# Route thar render html tamplate page to register User in the  application
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
    pass
