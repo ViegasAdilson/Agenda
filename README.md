@@ -12,13 +12,12 @@ It is an application that in the first place to log in to the page you need to c
 ### Developed Features
 
 1. Login for diferent User
-   1.1. Create User
+   1. Create User
 2. Dashboard
-   2.1. List all Contact automatically
-   2.1. Create Contacts
-   2.2. Add Contacts
-   2.3. Edit Contact
-   2.4. Delet Contact
+   - List all Contact automatically
+   - Create Contacts
+   - Edit Contact
+   - Delet Contact
 
 ## Database Diagram
 
