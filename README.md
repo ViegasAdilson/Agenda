@@ -25,7 +25,7 @@ It is an application that in the first place to log in to the page you need to c
 ![Database Diagram](static/picture_files/db_diagram.PNG)
 
 ### app.py
-'''python
+''' python
 # class that represent web page users
 class Users(db.Model, UserMixin):
    pass
