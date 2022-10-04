@@ -55,7 +55,7 @@ class RegisterForm(FlaskForm):
 def sign_page():
    pass
   
-# Dashboard page that render al your Contact 
+# Dashboard page that render all your Contact 
 @app.route('/contacts', methods=['POST', 'GET'])
 @login_required
 def list_page():
