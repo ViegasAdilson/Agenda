@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block head%} {%endblock%} {% block section%}
+<div class="container">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <form
+        method="POST"
+        class="form-register bg-dark text-white mt-5 p-5"
+        style="border-radius: 50px"
+      >
+        {{form.hidden_tag()}}
+        <h1 class="h3 mb-3 text-center font-weight-normal">
+          Please Create your Account
+        </h1>
+        {{ form.username.label(class="mb-0") }} {{
+        form.username(class="form-control", placeholder="User Name") }} {{
+        form.email_address.label(class="mb-0 mt-2") }} {{
+        form.email_address(class="form-control", placeholder="Email Address") }}
+        {{ form.password1.label(class="mb-0 mt-2") }} {{
+        form.password1(class="form-control", placeholder="Password") }} {{
+        form.password2.label(class="mb-0 mt-2") }} {{
+        form.password2(class="form-control", placeholder="Confirm Password") }}
+        {{ form.submit(class="btn btn-primary mt-2") }}
+      </form>
+      <div class="col-2"></div>
+    </div>
+  </div>
+</div>
+{% endblock%}

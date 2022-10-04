@@ -1,15 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title%} {% endblock%} {% block section%}
 
-{% block head%} 
-<div id="entra-div">
-    <h3>Contact Book</h3>
-    <form action="" class="form">
-        <label for="">Email:</label>
-        <input type="text" name="user" required />
-        <label for="">Password:</label>
-        <input type="password" name="password" required />
-        <button type="submit">Sign-in</button>
-        <button type="submit">Register</button>
-    </form>
+<div id="entra-div" class="bg-dark text-white p-5">
+  <h3>Login</h3>
+  <form action="" class="form" method="post">
+    {{ form.hidden_tag() }} {{form.email(class="form-control mt-5",
+    placeholder="Email") }} {{ form.password(class="form-control",
+    placeholder="Password") }} {{ form.submit(class="btn btn-lg btn-info") }}
+  </form>
 </div>
 {% endblock%}
