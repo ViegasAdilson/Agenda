@@ -20,6 +20,22 @@ It is an application that in the first place to log in to the page you need to c
    - Edit Contact
    - Delet Contact
 
-## Database Diagram:
+### Database Diagram:
 
 ![Database Diagram](static/picture_files/db_diagram.PNG)
+
+### app.py
+'''python
+# class that represent web page users
+class Users(db.Model, UserMixin):
+   pass
+# class that represent contact that user can creat
+class Contacts(db.Model):
+   pass
+ 
+
+'''
+
+
+
+
