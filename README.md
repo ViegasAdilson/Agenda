@@ -4,10 +4,11 @@ It is an application that in the first place to log in to the page you need to c
 
 ### Language of Project:
 
-- Python Flask
+- Python
+- Flask framework
 - HTML
 - CSS
-- Bootstrap
+- Bootstrap framwork
 - Sqlite3
 
 ### Developed Features:

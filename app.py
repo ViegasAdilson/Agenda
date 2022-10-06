@@ -1,4 +1,3 @@
-from unicodedata import name
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -7,7 +6,6 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField, TelF
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
@@ -167,7 +165,6 @@ def list_page():
                 owner=user_current_id).order_by(Contacts.name).all()
             form.name.data = form.surname.data = form.phone.data = form.phone.data = form.email_address.data = form.home_address.data = form.description.data = ''
             redirect(url_for('list_page'))
-
     return render_template('list_page.html', form=form, contacts_list=contacts_list)
 
 
@@ -203,15 +200,9 @@ def delete_page(id):
 
 @app.route('/contacts/edit/<name>', methods=['GET', 'POST'])
 def edit_contact(name):
-
     contact = Contacts.query.filter(Contacts.name == name).first()
-    # user_current_id = current_user.id
-    print(f'Name {name} e {contact.name}')
     form = ContactForm()
     if form.validate_on_submit():
-
-        # edited_contact = Contacts(name=form.name.data, surname=form.surname.data, phone_number=form.phone.data,
-        #                           email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, picture=image_name, owner=user_current_id)
         contact.name = form.name.data
         contact.surname = form.surname.data
         contact.phone_number = form.phone.data
@@ -223,8 +214,7 @@ def edit_contact(name):
             image_name = save_image(image)
             contact.picture = image_name
         db.session.commit()
-        redirect(url_for('list_page'))
-    print(f'contact {contact.name}')
+        return redirect(url_for('list_page'))
     form.name.data = contact.name
     form.surname.data = contact.surname
     form.phone.data = contact.phone_number
