@@ -5,8 +5,7 @@ from flask_login import LoginManager, login_user, UserMixin, current_user, logou
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, TelField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed, FileField
-import os
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///agenda.sqlite3'
@@ -60,13 +59,13 @@ class Contacts(db.Model):
 
 class RegisterForm(FlaskForm):
 
-    def validate_username(self, username_to_check):
-        user = Users.query.filter_by(
-            username=username_to_check.data).first()
+    # def validate_username(self, username_to_check):
+    #     user = Users.query.filter_by(
+    #         username=username_to_check.data).first()
 
-        if user:
-            raise ValidationError(
-                'Username already exists! Please try a different username')
+    #     if user:
+    #         raise ValidationError(
+    #             'Username already exists! Please try a different username')
 
     username = StringField(
         label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
