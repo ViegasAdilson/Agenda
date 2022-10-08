@@ -9,26 +9,18 @@ from flask_wtf.file import FileAllowed, FileField
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///agenda.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///agenda.sqlite3'
 app.config['SECRET_KEY'] = '300922'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
 
-def save_image(picture_file):
-    picture_name = picture_file.filename
-    picture_path = os.path.join(
-        app.root_path, 'static/picture_files', picture_name)
-    picture_file.save(picture_path)
-    return picture_name
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
-###################################### Models #############################################
+# ###################################### Models #############################################
 
 
 class Users(db.Model, UserMixin):
@@ -61,8 +53,6 @@ class Contacts(db.Model):
     home_address = db.Column(db.String(length=20), nullable=False)
     description = db.Column(db.String(length=1024),
                             nullable=False)
-    picture = db.Column(db.String(length=20),
-                        nullable=True, default='default.png')
     owner = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
 
@@ -73,6 +63,7 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username_to_check):
         user = Users.query.filter_by(
             username=username_to_check.data).first()
+
         if user:
             raise ValidationError(
                 'Username already exists! Please try a different username')
@@ -106,8 +97,6 @@ class ContactForm(FlaskForm):
         label='Home Address:', validators=[DataRequired()])
     description = TextAreaField(
         label='User Name:', validators=[DataRequired()])
-    picture = FileField(label="Update Profile Picture",
-                        validators=[FileAllowed(['jpg', 'png', 'PNG'])])
     submit = SubmitField('Save')
 
 
@@ -117,6 +106,7 @@ def sign_page():
     if form.validate_on_submit():
         user_found = Users.query.filter_by(
             email_address=form.email.data).first()
+
         if user_found:
             if user_found and user_found.check_password_correction(attempted_password=form.password.data):
                 login_user(user_found)
@@ -139,11 +129,15 @@ def list_page():
     user_current_id = current_user.id
     contacts_list = Contacts.query.filter_by(
         owner=user_current_id).order_by(Contacts.name).all()
+
     if form.validate_on_submit():
+        # email = form.email_address.data
+        # phone = form.phone.data
         fund_email = Contacts.query.filter_by(
             owner=user_current_id, email_address=form.email_address.data).first()
         fund_phone = Contacts.query.filter_by(
             owner=user_current_id, phone_number=form.phone.data).first()
+
         if fund_email:
             flash(
                 f'There is a contact with {fund_email.email_address}, please try another email', category='danger')
@@ -151,19 +145,16 @@ def list_page():
             flash(
                 f'There is a contact with {fund_phone.phone_number}, please try another Phone Number', category='danger')
         else:
-            image = form.picture.data
-            if image != None:
-                image_name = save_image(image)
-            else:
-                image_name = 'default.png'
             new_contact = Contacts(name=form.name.data, surname=form.surname.data, phone_number=form.phone.data,
-                                   email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, picture=image_name, owner=user_current_id)
+                                   email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, owner=user_current_id)
             db.session.add(new_contact)
             db.session.commit()
+
             flash(f'User added successfuly', category='success')
             contacts_list = Contacts.query.filter_by(
                 owner=user_current_id).order_by(Contacts.name).all()
             form.name.data = form.surname.data = form.phone.data = form.phone.data = form.email_address.data = form.home_address.data = form.description.data = ''
+
             redirect(url_for('list_page'))
     return render_template('list_page.html', form=form, contacts_list=contacts_list)
 
@@ -177,6 +168,7 @@ def register_page():
                          password=form.password1.data)
         db.session.add(new_user)
         db.session.commit()
+
         return redirect(url_for('sign_page'))
     return render_template('register_page.html', form=form)
 
@@ -192,15 +184,18 @@ def delete_page(id):
     form = ContactForm()
     Contacts.query.filter(Contacts.id == id).delete()
     db.session.commit()
+
     user_current_id = current_user.id
     contacts_list = Contacts.query.filter_by(
         owner=user_current_id).order_by(Contacts.name).all()
+
     return render_template('list_page.html', form=form, contacts_list=contacts_list)
 
 
 @app.route('/contacts/edit/<name>', methods=['GET', 'POST'])
 def edit_contact(name):
     contact = Contacts.query.filter(Contacts.name == name).first()
+
     form = ContactForm()
     if form.validate_on_submit():
         contact.name = form.name.data
@@ -209,10 +204,7 @@ def edit_contact(name):
         contact.email_address = form.email_address.data
         contact.home_address = form.home_address.data
         contact.description = form.description.data
-        image = form.picture.data
-        if image != None:
-            image_name = save_image(image)
-            contact.picture = image_name
+
         db.session.commit()
         return redirect(url_for('list_page'))
     form.name.data = contact.name
@@ -221,8 +213,9 @@ def edit_contact(name):
     form.email_address.data = contact.email_address
     form.home_address.data = contact.home_address
     form.description.data = contact.description
-    form.picture.data = contact.picture
+
     return render_template('edit_contact.html', form=form)
+# https://github.com/excitebyphina/Blueprint_Fabricv1.git
 
 
 if __name__ == '__main__':
