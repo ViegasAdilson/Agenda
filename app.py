@@ -59,14 +59,6 @@ class Contacts(db.Model):
 
 class RegisterForm(FlaskForm):
 
-    # def validate_username(self, username_to_check):
-    #     user = Users.query.filter_by(
-    #         username=username_to_check.data).first()
-
-    #     if user:
-    #         raise ValidationError(
-    #             'Username already exists! Please try a different username')
-
     username = StringField(
         label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = StringField(
