@@ -1,3 +1,4 @@
+from unicodedata import name
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -106,7 +107,7 @@ def sign_page():
                 return redirect(url_for('list_page'))
             else:
                 flash(
-                    f'Usename or password does not match', category='danger')
+                    f'Email or password does not match', category='danger')
         else:
             flash(
                 f'User does not exist', category='danger')
@@ -154,11 +155,24 @@ def list_page():
 def register_page():
     form = RegisterForm()
     if form.validate_on_submit():
-        new_user = Users(username=form.username.data,
-                         email_address=form.email_address.data,
-                         password=form.password1.data)
-        db.session.add(new_user)
-        db.session.commit()
+        username = form.username.data
+        email = form.email_address.data
+        passwd = form.password1.data
+        email_found = Users.query.filter_by(
+            email_address=email).first()
+        name_found = Users.query.filter_by(username=username).first()
+        if name_found.username == username:
+            flash(
+                f'There is a contact with {username}, please try another username', category='danger')
+        elif email_found.email_address == email:
+            flash(
+                f'There is a contact with {email}, please try another email', category='danger')
+        else:
+            new_user = Users(username=username,
+                             email_address=email,
+                             password=passwd)
+            db.session.add(new_user)
+            db.session.commit()
 
         return redirect(url_for('sign_page'))
     return render_template('register_page.html', form=form)
@@ -206,7 +220,7 @@ def edit_contact(name):
     form.description.data = contact.description
 
     return render_template('edit_contact.html', form=form)
-# https://github.com/excitebyphina/Blueprint_Fabricv1.git
+# https://github.com/excitebyphina/QA_FinalProject.git
 
 
 if __name__ == '__main__':

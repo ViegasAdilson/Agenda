@@ -26,12 +26,13 @@ It is an application that in the first place to log in to the page you need to c
 ![Database Diagram](static/picture_files/db_diagram.PNG)
 
 ### app.py
+
 ```Python
 ###################### database #########################
 #class that represent Users table in database
 class Users(db.Model, UserMixin):
    pass
-   
+
 #class that represent Contacts table in database
 class Contacts(db.Model):
    pass
@@ -42,21 +43,21 @@ class Contacts(db.Model):
 # Form to creat User for my application with 'username, email, and password'
 class RegisterForm(FlaskForm):
    pss
- 
+
  # Form that will render log in form in the application with an email and password and login button
  class LoginForm(FlaskForm):
    pass
- 
+
  # Form that will render form to creat Contact on your in the application. And I use the same form to edit contact
  class ContactForm(FlaskForm):
    pass
- 
+
 ######################## Routes ##########################
 # Home route that render log in page for User log in the application
 @app.route('/', methods=['GET', 'POST'])
 def sign_page():
    pass
-  
+
 # Dashboard page that will list all your Contact automatically
 @app.route('/contacts', methods=['POST', 'GET'])
 @login_required
@@ -67,7 +68,7 @@ def list_page():
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
    pass
-   
+
 # Route responsible to log out the User in the application
 @app.route('/logout')
 def logout_page():
@@ -82,7 +83,3 @@ def delete_page(id):
 @app.route('/contacts/edit/<name>', methods=['GET', 'POST'])
 def edit_contact(name):
 ```
-
-
-
-
