@@ -58,11 +58,6 @@
                   >Register</a
                 >
               </li>
-              <li class="nav-item">
-                <a href="{{url_for('sign_page')}}" class="nav-link text-white"
-                  >Sign In</a
-                >
-              </li>
               {%endif%}
             </ul>
           </div>
@@ -83,11 +78,7 @@
       </div>
       {% endfor %} {% endif %} {% endwith %}
     </head>
-    <section>
-    {% block section %} 
-
-    {% endblock%}
-    </section>
+    <section>{% block section %} {% endblock%}</section>
 
     <footer class="pt-1 pb-1">
       <div class="conatiner">

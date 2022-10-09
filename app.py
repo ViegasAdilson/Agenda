@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, UserMixin, current_user, logout_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, TelField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
+from wtforms.validators import Length, EqualTo, Email, DataRequired
 from flask_wtf import FlaskForm
 
 
@@ -123,8 +123,6 @@ def list_page():
         owner=user_current_id).order_by(Contacts.name).all()
 
     if form.validate_on_submit():
-        # email = form.email_address.data
-        # phone = form.phone.data
         fund_email = Contacts.query.filter_by(
             owner=user_current_id, email_address=form.email_address.data).first()
         fund_phone = Contacts.query.filter_by(
@@ -161,10 +159,10 @@ def register_page():
         email_found = Users.query.filter_by(
             email_address=email).first()
         name_found = Users.query.filter_by(username=username).first()
-        if name_found.username == username:
+        if name_found:
             flash(
                 f'There is a contact with {username}, please try another username', category='danger')
-        elif email_found.email_address == email:
+        elif email_found:
             flash(
                 f'There is a contact with {email}, please try another email', category='danger')
         else:
