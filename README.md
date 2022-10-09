@@ -37,22 +37,22 @@ class Contacts(db.Model):
    pass
 ######################## Forms #########################
 
-# Those are class form that I use to render form in the HTML templates
+# These are class form that I use to render form in the HTML templates
 
-# Form to creat User for my application with 'username, email, and password'
+# Form to creat User application with 'username, email, and password'
 class RegisterForm(FlaskForm):
    pss
  
- # Form that will render log in form in the application with an email and password and login button
+ # Form that will render log in the application with an email and password 
  class LoginForm(FlaskForm):
    pass
  
- # Form that will render form to creat Contact on your in the application. And I use the same form to edit contact
+ # Form that will render form to creat Contact in the application. And I use the same form to edit contact
  class ContactForm(FlaskForm):
    pass
  
 ######################## Routes ##########################
-# Home route that render log in page for User log in the application
+# Home route that render login page, whem User login into application
 @app.route('/', methods=['GET', 'POST'])
 def sign_page():
    pass
@@ -63,7 +63,7 @@ def sign_page():
 def list_page():
    pass
 
-# Route thar render html tamplate page to register User in the  application
+# Route that render html tamplate page to register User into application
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
    pass
@@ -73,12 +73,12 @@ def register_page():
 def logout_page():
    pass
 
-# Route responsible for delete the Contact. The Id of Contact is passed in url to the route
+# Route responsible to delete the Contact. The Id of Contact is passed in url to the route
 @app.route('/delete/<int:id>')
 def delete_page(id):
    pass
 
-# Route responsible to edit the details of Contant. The name of Contact is passed in url to the route
+# Route responsible to edit the details of Contact. The name of Contact is passed in url to the route
 @app.route('/contacts/edit/<name>', methods=['GET', 'POST'])
 def edit_contact(name):
 ```
