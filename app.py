@@ -98,7 +98,6 @@ def sign_page():
     if form.validate_on_submit():
         user_found = Users.query.filter_by(
             email_address=form.email.data).first()
-
         if user_found:
             if user_found and user_found.check_password_correction(attempted_password=form.password.data):
                 login_user(user_found)
@@ -127,7 +126,6 @@ def list_page():
             owner=user_current_id, email_address=form.email_address.data).first()
         fund_phone = Contacts.query.filter_by(
             owner=user_current_id, phone_number=form.phone.data).first()
-
         if fund_email:
             flash(
                 f'There is a contact with {fund_email.email_address}, please try another email', category='danger')
@@ -139,12 +137,10 @@ def list_page():
                                    email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, owner=user_current_id)
             db.session.add(new_contact)
             db.session.commit()
-
             flash(f'User added successfuly', category='success')
             contacts_list = Contacts.query.filter_by(
                 owner=user_current_id).order_by(Contacts.name).all()
             form.name.data = form.surname.data = form.phone.data = form.phone.data = form.email_address.data = form.home_address.data = form.description.data = ''
-
             redirect(url_for('list_page'))
     return render_template('list_page.html', form=form, contacts_list=contacts_list)
 
@@ -171,7 +167,6 @@ def register_page():
                              password=passwd)
             db.session.add(new_user)
             db.session.commit()
-
         return redirect(url_for('sign_page'))
     return render_template('register_page.html', form=form)
 
@@ -187,18 +182,15 @@ def delete_page(id):
     form = ContactForm()
     Contacts.query.filter(Contacts.id == id).delete()
     db.session.commit()
-
     user_current_id = current_user.id
     contacts_list = Contacts.query.filter_by(
         owner=user_current_id).order_by(Contacts.name).all()
-
     return render_template('list_page.html', form=form, contacts_list=contacts_list)
 
 
 @app.route('/contacts/edit/<id>', methods=['GET', 'POST'])
 def edit_contact(id):
     contact = Contacts.query.filter(Contacts.id == id).first()
-
     form = ContactForm()
     if form.validate_on_submit():
         contact.name = form.name.data
@@ -207,7 +199,6 @@ def edit_contact(id):
         contact.email_address = form.email_address.data
         contact.home_address = form.home_address.data
         contact.description = form.description.data
-
         db.session.commit()
         return redirect(url_for('list_page'))
     form.name.data = contact.name
@@ -216,9 +207,7 @@ def edit_contact(id):
     form.email_address.data = contact.email_address
     form.home_address.data = contact.home_address
     form.description.data = contact.description
-
     return render_template('edit_contact.html', form=form)
-# https://github.com/excitebyphina/QA_FinalProject.git
 
 
 if __name__ == '__main__':
