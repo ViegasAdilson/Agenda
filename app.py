@@ -143,9 +143,11 @@ def list_page():
         if fund_email:
             flash(
                 f'There is a contact with {fund_email.email_address}, please try another email', category='danger')
+            form.name.data = form.surname.data = form.phone.data = form.email_address.data = form.home_address.data = form.description.data = ''
         elif fund_phone:
             flash(
                 f'There is a contact with {fund_phone.phone_number}, please try another Phone Number', category='danger')
+            form.name.data = form.surname.data = form.phone.data = form.phone.data = form.email_address.data = form.home_address.data = form.description.data = ''
         else:
             image = form.picture.data
             if image != None:
@@ -212,20 +214,32 @@ def edit_contact(id):
     contact = Contacts.query.filter(Contacts.id == id).first()
     form = ContactForm()
     if form.validate_on_submit():
-        image = form.picture.data
-        if image != None:
-            image_name = save_image(image)
+        user_current_id = current_user.id
+        fund_email = Contacts.query.filter_by(
+            owner=user_current_id, email_address=form.email_address.data).first()
+        fund_phone = Contacts.query.filter_by(
+            owner=user_current_id, phone_number=form.phone.data).first()
+        if fund_email and fund_email.id != contact.id:
+            flash(
+                f'There is a contact with {fund_email.email_address}, please try another email', category='danger')
+        elif fund_phone and fund_phone.id != contact.id:
+            flash(
+                f'There is a contact with {fund_phone.phone_number}, please try another Phone Number', category='danger')
         else:
-            image_name = contact.picture
-        contact.name = form.name.data
-        contact.surname = form.surname.data
-        contact.phone_number = form.phone.data
-        contact.email_address = form.email_address.data
-        contact.home_address = form.home_address.data
-        contact.description = form.description.data
-        contact.picture = image_name
-        db.session.commit()
-        return redirect(url_for('list_page'))
+            image = form.picture.data
+            if image != None:
+                image_name = save_image(image)
+            else:
+                image_name = contact.picture
+            contact.name = form.name.data
+            contact.surname = form.surname.data
+            contact.phone_number = form.phone.data
+            contact.email_address = form.email_address.data
+            contact.home_address = form.home_address.data
+            contact.description = form.description.data
+            contact.picture = image_name
+            db.session.commit()
+            return redirect(url_for('list_page'))
     form.name.data = contact.name
     form.surname.data = contact.surname
     form.phone.data = contact.phone_number
