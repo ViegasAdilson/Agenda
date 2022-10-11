@@ -5,7 +5,9 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, UserMixin, current_user, logout_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, TelField
 from wtforms.validators import Length, EqualTo, Email, DataRequired
+from flask_wtf.file import FileAllowed, FileField
 from flask_wtf import FlaskForm
+import os
 
 
 app = Flask(__name__)
@@ -14,6 +16,14 @@ app.config['SECRET_KEY'] = '300922'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+
+
+def save_image(picture_file):
+    picture_name = picture_file.filename
+    picture_path = os.path.join(
+        app.root_path, 'static/picture_files', picture_name)
+    picture_file.save(picture_path)
+    return picture_name
 
 
 @login_manager.user_loader
@@ -53,6 +63,8 @@ class Contacts(db.Model):
     home_address = db.Column(db.String(length=20), nullable=False)
     description = db.Column(db.String(length=1024),
                             nullable=False)
+    picture = db.Column(db.String(length=20),
+                        nullable=True, default='default.png')
     owner = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
 
@@ -89,6 +101,8 @@ class ContactForm(FlaskForm):
         label='Home Address:', validators=[DataRequired()])
     description = TextAreaField(
         label='User Name:', validators=[DataRequired()])
+    picture = FileField(label="Update Profile Picture",
+                        validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Save')
 
 
@@ -133,8 +147,13 @@ def list_page():
             flash(
                 f'There is a contact with {fund_phone.phone_number}, please try another Phone Number', category='danger')
         else:
+            image = form.picture.data
+            if image != None:
+                image_name = save_image(image)
+            else:
+                image_name = 'default.png'
             new_contact = Contacts(name=form.name.data, surname=form.surname.data, phone_number=form.phone.data,
-                                   email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, owner=user_current_id)
+                                   email_address=form.email_address.data, home_address=form.home_address.data, description=form.description.data, picture=image_name, owner=user_current_id)
             db.session.add(new_contact)
             db.session.commit()
             flash(f'User added successfuly', category='success')
@@ -193,12 +212,18 @@ def edit_contact(id):
     contact = Contacts.query.filter(Contacts.id == id).first()
     form = ContactForm()
     if form.validate_on_submit():
+        image = form.picture.data
+        if image != None:
+            image_name = save_image(image)
+        else:
+            image_name = contact.picture
         contact.name = form.name.data
         contact.surname = form.surname.data
         contact.phone_number = form.phone.data
         contact.email_address = form.email_address.data
         contact.home_address = form.home_address.data
         contact.description = form.description.data
+        contact.picture = image_name
         db.session.commit()
         return redirect(url_for('list_page'))
     form.name.data = contact.name
