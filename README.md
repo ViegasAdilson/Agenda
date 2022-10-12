@@ -25,9 +25,21 @@ It is an application that in the first place to log in to the page you need to c
 
 ![Database Diagram](static/picture_files/db_diagram.PNG)
 
+
+#### To rum the application, first actives virtual environments 
+
+Windows system
+```
+git bash: source env\Scripts\activate
+cmd.exe:  C:\> env\Scripts\activate.bat
+after activated (env) run:
+python app.py
+```
+
 ### app.py
 
 ```Python
+
 ###################### database #########################
 #class that represent Users table in database
 class Users(db.Model, UserMixin):
@@ -80,6 +92,6 @@ def delete_page(id):
    pass
 
 # Route responsible to edit the details of Contant. The name of Contact is passed in url to the route
-@app.route('/contacts/edit/<name>', methods=['GET', 'POST'])
-def edit_contact(name):
+@app.route('/contacts/edit/<int:id>', methods=['GET', 'POST'])
+def edit_contact(id):
 ```
